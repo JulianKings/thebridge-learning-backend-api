@@ -1,22 +1,12 @@
-const {MongoClient} = require("mongodb");
-
-let client;
-let database;
+const mongoose = require("mongoose");
 
 async function conectar() {
-    client = new MongoClient(process.env.MONGODB_URI);
-    await client.connect();
-    database = client.db(process.env.DB_NAME);
-    console.log(`Conectado a Mongo ${database.databaseName}`);
-}
-
-function getDatabase() {
-    if (!database) throw new Error("Sin conexion");
-    return database;
+    await mongoose.connect(process.env.MONGODB_URI, {dbName: process.env.DB_NAME});
+    console.log(`Conectado a Mongo ${mongoose.connection.name}`);
 }
 
 async function desconectar() {
-    await client.close();
+    await mongoose.disconnect();
 }
 
-module.exports = { conectar, getDatabase, desconectar }
+module.exports = { conectar, desconectar }
