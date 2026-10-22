@@ -70,4 +70,4 @@ const proveedorSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Proveedor", proveedorSchema, "Proveedores");
+module.exports = mongoose.model("Proveedor", proveedorSchema, "Proveedor");

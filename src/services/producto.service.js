@@ -1,7 +1,7 @@
 const Producto = require("../models/Producto");
 
 async function listar() {
-    return Proveedor.find();
+    return Producto.find();
 }
 
 module.exports = {listar};

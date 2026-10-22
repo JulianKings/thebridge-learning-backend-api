@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 
+
 const TIPOS = [
     "camiseta", "camisa", "polo", "sudadera", "jersey", "chaqueta", "abrigo", "chaleco",
     "pantalon", "vaqueros", "pantalon_corto", "bermudas", "leggings", "falda", "vestido",
@@ -34,6 +35,6 @@ const productoSchema = new Schema(
     { timestamps: true }
 );
 
-module.exports = model("Producto", productoSchema);
+module.exports = model("Producto", productoSchema, "Producto");
 module.exports.TIPOS = TIPOS;
 module.exports.TALLAS = TALLAS;
