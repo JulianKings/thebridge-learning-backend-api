@@ -1,10 +1,15 @@
 const cors = require('cors')
 const express = require('express')
+const ropaRouter = require('./routes/ropa.routes');
+const proveedorRouter = require('./routes/proveedor.routes')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+
+app.use('/', ropaRouter);
+app.use('/proveedores', proveedorRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: `No existe la ruta ${req.method} ${req.originalUrl}` })
