@@ -32,7 +32,7 @@ async function reemplazar(req, res, next) {
         const proveedor = await proveedorService.reemplazar(req.params.id, req.body);
         res.json(proveedor);
     } catch (error) {
-        next(devolerStatus(error));
+        next(devolverStatus(error));
     }
 }
 

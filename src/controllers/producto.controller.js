@@ -3,7 +3,7 @@ const productoService = require("../services/producto.service");
 
 
 const getStatus = (req, res) => {
-    res.status(200).json({ status: "ok", db: (mongoose.connection.readyState) ? "conectada": "no conectada"});
+    res.status(200).json({ status: "ok", db: mongoose.connection.readyState === 1 ? "conectada" : "no conectada"});
 };
 
 async function listar(req, res, next) {
@@ -38,7 +38,7 @@ async function reemplazar(req, res, next) {
         const producto = await productoService.reemplazar(req.params.id, req.body);
         res.json(producto);
     } catch (error) {
-        next(devolerStatus(error));
+        next(devolverStatus(error));
     }
 }
 
