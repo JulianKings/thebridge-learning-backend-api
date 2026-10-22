@@ -1,39 +1,39 @@
-const producto = require("../models/producto.model");
+const Proveedor = require("../models/proveedor.model");
 
 const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 
 async function listar() {
-    return producto.find();
+    return Proveedor.find();
 }
 
 async function obtenerPorId(id) {
-    const producto = await producto.findById(id);
-    if (!producto) throw noEncontrado(id);
-    return producto;
+    const proveedor = await Proveedor.findById(id);
+    if (!proveedor) throw noEncontrado(id);
+    return proveedor;
 }
 
 async function crear(datos) {
-    return producto.create(datos);
+    return Proveedor.create(datos);
 }
 
 async function reemplazar(id, datos) {
     const { _id, ...resto } = datos;
-    const producto = await producto.findOneAndReplace({ _id: id }, resto, opcionesActualizacion);
-    if (!producto) throw noEncontrado(id);
-    return producto;
+    const proveedor = await Proveedor.findOneAndReplace({ _id: id }, resto, opcionesActualizacion);
+    if (!proveedor) throw noEncontrado(id);
+    return proveedor;
 }
 
 async function actualizar(id, datos) {
     const { _id, ...resto } = datos;
-    const producto = await producto.findByIdAndUpdate(id, resto, opcionesActualizacion);
-    if (!producto) throw noEncontrado(id);
-    return producto;
+    const proveedor = await Proveedor.findByIdAndUpdate(id, resto, opcionesActualizacion);
+    if (!proveedor) throw noEncontrado(id);
+    return proveedor;
 }
 
 async function eliminar(id) {
-    const producto = await producto.findByIdAndDelete(id);
-    if (!producto) throw noEncontrado(id);
-    return producto;
+    const proveedor = await Proveedor.findByIdAndDelete(id);
+    if (!proveedor) throw noEncontrado(id);
+    return proveedor;
 }
 
 function noEncontrado(id) {

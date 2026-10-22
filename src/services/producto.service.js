@@ -1,5 +1,6 @@
 const Producto = require("../models/Producto");
 
+const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 
 async function listar() {
     return Producto.find();
