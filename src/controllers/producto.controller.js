@@ -8,12 +8,58 @@ const getStatus = (req, res) => {
 
 async function listar(req, res, next) {
     try {
-        const proveedores = await productoService.listar();
-        res.json(proveedores);
+        const productos = await productoService.listar();
+        res.json(productos);
     } catch (error) {
         next(devolverStatus(error));
     }
 }
+
+async function obtenerPorId(req, res, next) {
+    try {
+        const producto = await productoService.obtenerPorId(req.params.id);
+        res.json(producto);
+    } catch (error) {
+        next(devolverStatus(error));
+    }
+}
+
+async function crear(req, res, next) {
+    try {
+        const producto = await productoService.crear(req.body);
+        res.status(201).json(producto);
+    } catch (error) {
+        next(devolverStatus(error));
+    }
+}
+
+async function reemplazar(req, res, next) {
+    try {
+        const producto = await productoService.reemplazar(req.params.id, req.body);
+        res.json(producto);
+    } catch (error) {
+        next(devolerStatus(error));
+    }
+}
+
+async function actualizar(req, res, next) {
+    try {
+        const producto = await productoService.actualizar(req.params.id, req.body);
+        res.json(producto);
+    } catch (error) {
+        next(devolverStatus(error));
+    }
+}
+
+async function eliminar(req, res, next) {
+    try {
+        await productoService.eliminar(req.params.id);
+        res.status(204).end();
+    } catch (error) {
+        next(devolverStatus(error));
+    }
+}
+
 
 function devolverStatus(error) {
     if (error.status) return error;
@@ -30,4 +76,4 @@ function devolverStatus(error) {
     return error;
 }
 
-module.exports = {getStatus, listar};
+module.exports = {obtenerPorId, listar, getStatus, crear, reemplazar, actualizar, eliminar};
