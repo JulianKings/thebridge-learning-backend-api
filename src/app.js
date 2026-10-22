@@ -1,6 +1,6 @@
 const cors = require('cors')
 const express = require('express')
-const ropaRouter = require('./routes/ropa.routes');
+const ropaRouter = require('./routes/producto.routes');
 const proveedorRouter = require('./routes/proveedor.routes')
 
 const app = express()
