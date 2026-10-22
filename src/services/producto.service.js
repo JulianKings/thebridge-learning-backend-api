@@ -36,7 +36,7 @@ async function eliminar(id) {
 }
 
 function noEncontrado(id) {
-    const error = new Error(`No existe el proveedor ${id}`);
+    const error = new Error(`No existe el producto ${id}`);
     error.status = 404;
     return error;
 }

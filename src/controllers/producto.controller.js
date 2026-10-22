@@ -71,7 +71,7 @@ function devolverStatus(error) {
         error.message = `Valor no válido para ${error.path}: ${error.value}`;
     } else if (error.code === 11000) {
         error.status = 409;
-        error.message = `Ya existe un proveedor con ese ${Object.keys(error.keyValue).join(", ")}`;
+        error.message = `Ya existe un producto con ese ${Object.keys(error.keyValue).join(", ")}`;
     }
     return error;
 }

@@ -30,7 +30,7 @@ const productoSchema = new Schema(
         descuento: { type: Number, min: 0, max: 90, default: 0 },
         evento: { type: String, trim: true },
         foto: { type: String, trim: true },
-        proveedor: { type: Schema.Types.ObjectId, ref: "Proveedor" }
+        proveedor: { type: Schema.Types.ObjectId, ref: "Proveedor", required: true },
     },
     { timestamps: true }
 );
