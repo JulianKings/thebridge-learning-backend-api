@@ -26,7 +26,7 @@ const productoSchema = new Schema(
         precio: { type: Number, required: true, min: 0 },
         disponible: { type: Boolean, default: true },
         talla: { type: [tallaSchema], default: [] },
-        temporada: { type: String, trim: true },
+        temporada: { type: String, trim: true, required: true },
         descuento: { type: Number, min: 0, max: 90, default: 0 },
         evento: { type: String, trim: true },
         foto: { type: String, trim: true },
