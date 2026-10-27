@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const { esFechaValida } = require("../utils/fecha");
+const { GENEROS } = require("./Cliente");
 
 const CARGOS = ["reponedor", "dependiente", "encargado"];
-const GENEROS = ["Hombre", "Mujer"];
 
 const empleadoSchema = new mongoose.Schema({
     nombre: {
@@ -74,4 +74,3 @@ const empleadoSchema = new mongoose.Schema({
 
 module.exports = mongoose.model("Empleado", empleadoSchema, "Empleado");
 module.exports.CARGOS = CARGOS;
-module.exports.GENEROS = GENEROS;

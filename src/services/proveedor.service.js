@@ -1,4 +1,4 @@
-const Proveedor = require("../models/proveedor.model");
+const Proveedor = require("../models/Proveedor");
 
 const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 

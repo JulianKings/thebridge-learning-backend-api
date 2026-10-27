@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { conectar, desconectar } = require("../src/config/config");
-const Proveedor = require("../src/models/proveedor.model");
+const Proveedor = require("../src/models/Proveedor");
 const Producto = require("../src/models/Producto");
 
 // Requiere haber ejecutado antes "npm run seed" para que existan los proveedores.

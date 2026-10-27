@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { conectar, desconectar } = require("../src/config/config");
-const Proveedor = require("../src/models/proveedor.model");
+const Proveedor = require("../src/models/Proveedor");
 
 // Webs y códigos postales de sede reales. Emails, teléfonos, condiciones y descuentos son ficticios (datos de demo).
 const proveedores = [

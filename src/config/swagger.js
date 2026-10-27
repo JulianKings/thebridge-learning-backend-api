@@ -1,7 +1,7 @@
 const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 const { TIPOS, TALLAS } = require("../models/Producto");
-const Proveedor = require("../models/proveedor.model");
+const Proveedor = require("../models/Proveedor");
 
 const DIVISAS = Proveedor.schema.path("divisa").enumValues;
 
