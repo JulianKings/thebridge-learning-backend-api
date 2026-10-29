@@ -1,5 +1,5 @@
 require("dotenv").config();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { conectar, desconectar } = require("../src/config/config");
 const Cliente = require("../src/models/Cliente");
 const Empleado = require("../src/models/Empleado");
