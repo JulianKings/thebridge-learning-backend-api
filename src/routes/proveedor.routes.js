@@ -1,7 +1,7 @@
 const express = require("express");
 const proveedorController = require("../controllers/proveedor.controller");
-const autenticar = require("../middlewares/autenticar.js");
-const autorizar = require("../middlewares/autorizar.js");
+const autenticar = require("../middleware/autenticar");
+const autorizar = require("../middleware/autorizar");
 const router = express.Router();
 
 /**
