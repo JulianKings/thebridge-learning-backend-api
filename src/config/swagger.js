@@ -4,6 +4,7 @@ const { TIPOS, TALLAS } = require("../models/Producto");
 const Proveedor = require("../models/Proveedor");
 const { GENEROS } = require("../models/Cliente");
 const { CARGOS } = require("../models/Empleado");
+const { ESTADOS } = require("../models/Compra");
 
 const DIVISAS = Proveedor.schema.path("divisa").enumValues;
 
@@ -23,7 +24,7 @@ const productoPropiedades = {
 const proveedorPropiedades = {
     nombreComercial: { type: "string", example: "Textiles García" },
     cp: { type: "string", pattern: "^(0[1-9]|[1-4]\\d|5[0-2])\\d{3}$", example: "28001" },
-    email: { type: "string", format: "email", example: "contacto@textilesgarcia.es" },
+    email: { type: "string", format: "email", example: "proveedores.textilesgarcia@thebridge.tech" },
     telefono: { type: "integer", description: "9 dígitos, empieza por 6, 7, 8 o 9", example: 912345678 },
     web: { type: "string", format: "uri", example: "https://textilesgarcia.es" },
     tipoProducto: { type: "array", minItems: 1, items: { type: "string" }, example: ["camiseta", "pantalon"] },
@@ -35,7 +36,7 @@ const proveedorPropiedades = {
 
 const personaPropiedades = {
     nombre: { type: "string", example: "Lucía Fernández" },
-    email: { type: "string", format: "email", example: "lucia@correo.es" },
+    email: { type: "string", format: "email", example: "lucia@thebridge.tech" },
     fechaNacimiento: { type: "string", description: "DD/MM/YYYY", example: "14/03/1995" },
     genero: { type: "string", enum: GENEROS }
 };
@@ -46,7 +47,7 @@ const clientePropiedades = {
     ...personaPropiedades,
     cp: { type: "string", example: "28013" },
     puntos: { type: "integer", minimum: 0, example: 120 },
-    afiliado: { type: "string", example: "HILO-0001" }
+    afiliado: { type: "string", example: "THEBRIDGE-0001" }
 };
 
 const empleadoPropiedades = {
@@ -84,7 +85,18 @@ const definicion = {
         securitySchemes: {
             bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" }
         },
+        headers: {
+            TotalCount: { description: "Total de resultados que cumplen los filtros, sin paginar", schema: { type: "integer" } }
+        },
         parameters: {
+            Q: { name: "q", in: "query", description: "Texto a buscar (no distingue mayúsculas ni tildes)", schema: { type: "string" } },
+            Genero: { name: "genero", in: "query", schema: { type: "string", enum: GENEROS } },
+            Page: { name: "page", in: "query", description: "Página (empieza en 1), junto con limit", schema: { type: "integer", minimum: 1 } },
+            Limit: { name: "limit", in: "query", description: "Resultados por página (máximo 100)", schema: { type: "integer", minimum: 1, maximum: 100 } },
+            EstadoCompra: { name: "estado", in: "query", description: "Uno o varios estados separados por comas", schema: { type: "string", example: "pendiente,enviado" } },
+            Desde: { name: "desde", in: "query", description: "Compras desde ese día (YYYY-MM-DD)", schema: { type: "string", format: "date" } },
+            Hasta: { name: "hasta", in: "query", description: "Compras hasta ese día incluido (YYYY-MM-DD)", schema: { type: "string", format: "date" } },
+            OrdenCompra: { name: "orden", in: "query", description: "Por defecto, las más recientes primero", schema: { type: "string", enum: ["createdAt", "-createdAt", "total", "-total", "puntos", "-puntos"] } },
             Id: {
                 name: "id",
                 in: "path",
@@ -148,6 +160,11 @@ const definicion = {
                 properties: { email: personaPropiedades.email, password: { type: "string", format: "password" } }
             },
             Cliente: { type: "object", properties: { _id: { type: "string" }, ...clientePropiedades } },
+            ClienteInput: {
+                type: "object",
+                required: ["nombre", "email", "password", "fechaNacimiento", "genero", "cp"],
+                properties: conPassword(clientePropiedades)
+            },
             ClientePatch: { type: "object", properties: conPassword(clientePropiedades) },
             EmpleadoInput: {
                 type: "object",
@@ -201,7 +218,29 @@ const definicion = {
                     },
                     total: { type: "number" },
                     puntos: { type: "integer", description: "1 punto por euro" },
+                    estado: { type: "string", enum: ESTADOS, default: "pendiente" },
                     createdAt: { type: "string", format: "date-time" }
+                }
+            },
+            CompraEstado: {
+                type: "object",
+                required: ["estado"],
+                properties: { estado: { type: "string", enum: ESTADOS } }
+            },
+            FiltrosRopa: {
+                type: "object",
+                properties: {
+                    grupos: {
+                        type: "array",
+                        items: { type: "object", properties: { slug: { type: "string" }, tipos: { type: "array", items: { type: "string" } } } }
+                    },
+                    tallas: { type: "array", items: { type: "string", enum: TALLAS } },
+                    temporadas: { type: "array", items: { type: "string" } },
+                    proveedores: {
+                        type: "array",
+                        items: { type: "object", properties: { _id: { type: "string" }, nombreComercial: { type: "string" } } }
+                    },
+                    precio: { type: "object", properties: { min: { type: "number" }, max: { type: "number" } } }
                 }
             },
             Proveedor: {

@@ -12,13 +12,22 @@ router.use(autenticar, autorizar("administrador"));
  * /administradores:
  *   get:
  *     tags: [Administrador]
- *     summary: Listar todos los administrador
+ *     summary: Listar los administradores, con filtros, orden y paginación
  *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - $ref: '#/components/parameters/Q'
+ *       - $ref: '#/components/parameters/Genero'
+ *       - { name: orden, in: query, schema: { type: string }, description: "nombre, email, createdAt (con - delante para descendente)" }
+ *       - $ref: '#/components/parameters/Page'
+ *       - $ref: '#/components/parameters/Limit'
  *     responses:
+ *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       401: { $ref: '#/components/responses/NoAutenticado' }
  *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: OK
+ *         headers:
+ *           X-Total-Count: { $ref: '#/components/headers/TotalCount' }
  *         content:
  *           application/json:
  *             schema:

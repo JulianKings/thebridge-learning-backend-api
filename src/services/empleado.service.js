@@ -1,9 +1,19 @@
 const Empleado = require("../models/Empleado");
+const { lista, booleano, rango, buscarEn, orden, paginar } = require("../utils/consulta");
 
 const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 
-async function listar() {
-    return Empleado.find();
+function listar(query = {}) {
+    const filtro = buscarEn(query.q, ["nombre", "email"]);
+    const generos = lista(query.genero);
+    if (generos.length) filtro.genero = { $in: generos };
+    const cargos = lista(query.cargo);
+    if (cargos.length) filtro.cargo = { $in: cargos };
+    const vacaciones = booleano(query.vacaciones, "vacaciones");
+    if (vacaciones !== undefined) filtro.vacaciones = vacaciones;
+    const salario = rango(query, "salario");
+    if (salario) filtro.salario = salario;
+    return paginar(Empleado, filtro, query, { ordenar: orden(query.orden, ["nombre", "email", "cargo", "salario", "createdAt"]) });
 }
 
 async function obtenerPorId(id) {

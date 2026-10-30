@@ -7,7 +7,7 @@ const proveedores = [
     {
         nombreComercial: "Zara",
         cp: "15143",
-        email: "proveedores@zara.example",
+        email: "proveedores.zara@thebridge.tech",
         telefono: 981000001,
         web: "https://www.zara.com",
         tipoProducto: ["Ropa de mujer", "Ropa de hombre", "Ropa infantil", "Calzado", "Accesorios"],
@@ -19,7 +19,7 @@ const proveedores = [
     {
         nombreComercial: "Pull&Bear",
         cp: "15570",
-        email: "proveedores@pullandbear.example",
+        email: "proveedores.pullandbear@thebridge.tech",
         telefono: 981000002,
         web: "https://www.pullandbear.com",
         tipoProducto: ["Ropa juvenil", "Denim", "Calzado", "Accesorios"],
@@ -31,7 +31,7 @@ const proveedores = [
     {
         nombreComercial: "Bershka",
         cp: "08490",
-        email: "proveedores@bershka.example",
+        email: "proveedores.bershka@thebridge.tech",
         telefono: 937000003,
         web: "https://www.bershka.com",
         tipoProducto: ["Ropa juvenil", "Denim", "Calzado", "Accesorios"],
@@ -43,7 +43,7 @@ const proveedores = [
     {
         nombreComercial: "Massimo Dutti",
         cp: "08490",
-        email: "proveedores@massimodutti.example",
+        email: "proveedores.massimodutti@thebridge.tech",
         telefono: 937000004,
         web: "https://www.massimodutti.com",
         tipoProducto: ["Ropa de mujer", "Ropa de hombre", "Piel", "Calzado"],
@@ -55,7 +55,7 @@ const proveedores = [
     {
         nombreComercial: "Stradivarius",
         cp: "08650",
-        email: "proveedores@stradivarius.example",
+        email: "proveedores.stradivarius@thebridge.tech",
         telefono: 938000005,
         web: "https://www.stradivarius.com",
         tipoProducto: ["Ropa de mujer", "Calzado", "Bolsos", "Accesorios"],
@@ -67,7 +67,7 @@ const proveedores = [
     {
         nombreComercial: "Oysho",
         cp: "08490",
-        email: "proveedores@oysho.example",
+        email: "proveedores.oysho@thebridge.tech",
         telefono: 937000006,
         web: "https://www.oysho.com",
         tipoProducto: ["Lencería", "Ropa deportiva", "Ropa de baño", "Pijamas"],
@@ -79,7 +79,7 @@ const proveedores = [
     {
         nombreComercial: "Lefties",
         cp: "15143",
-        email: "proveedores@lefties.example",
+        email: "proveedores.lefties@thebridge.tech",
         telefono: 981000007,
         web: "https://www.lefties.com",
         tipoProducto: ["Ropa de mujer", "Ropa de hombre", "Ropa infantil", "Hogar"],
@@ -91,7 +91,7 @@ const proveedores = [
     {
         nombreComercial: "Mango",
         cp: "08184",
-        email: "proveedores@mango.example",
+        email: "proveedores.mango@thebridge.tech",
         telefono: 938000008,
         web: "https://www.mango.com",
         tipoProducto: ["Ropa de mujer", "Ropa de hombre", "Ropa infantil", "Accesorios"],
@@ -103,7 +103,7 @@ const proveedores = [
     {
         nombreComercial: "Desigual",
         cp: "08039",
-        email: "proveedores@desigual.example",
+        email: "proveedores.desigual@thebridge.tech",
         telefono: 932000009,
         web: "https://www.desigual.com",
         tipoProducto: ["Ropa de mujer", "Ropa de hombre", "Bolsos", "Accesorios"],
@@ -115,7 +115,7 @@ const proveedores = [
     {
         nombreComercial: "Springfield",
         cp: "28034",
-        email: "proveedores@springfield.example",
+        email: "proveedores.springfield@thebridge.tech",
         telefono: 910000010,
         web: "https://www.springfield.com",
         tipoProducto: ["Ropa de hombre", "Ropa de mujer", "Denim", "Calzado"],
@@ -127,7 +127,7 @@ const proveedores = [
     {
         nombreComercial: "Cortefiel",
         cp: "28034",
-        email: "proveedores@cortefiel.example",
+        email: "proveedores.cortefiel@thebridge.tech",
         telefono: 910000011,
         web: "https://www.cortefiel.com",
         tipoProducto: ["Ropa de hombre", "Ropa de mujer", "Trajes", "Abrigos"],
@@ -139,7 +139,7 @@ const proveedores = [
     {
         nombreComercial: "El Ganso",
         cp: "28046",
-        email: "proveedores@elganso.example",
+        email: "proveedores.elganso@thebridge.tech",
         telefono: 910000012,
         web: "https://www.elganso.com",
         tipoProducto: ["Ropa de hombre", "Ropa de mujer", "Calzado", "Complementos"],

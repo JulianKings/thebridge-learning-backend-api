@@ -1,9 +1,13 @@
 const Administrador = require("../models/Administrador");
+const { lista, buscarEn, orden, paginar } = require("../utils/consulta");
 
 const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 
-async function listar() {
-    return Administrador.find();
+function listar(query = {}) {
+    const filtro = buscarEn(query.q, ["nombre", "email"]);
+    const generos = lista(query.genero);
+    if (generos.length) filtro.genero = { $in: generos };
+    return paginar(Administrador, filtro, query, { ordenar: orden(query.orden, ["nombre", "email", "createdAt"]) });
 }
 
 async function obtenerPorId(id) {

@@ -1,9 +1,17 @@
 const Proveedor = require("../models/Proveedor");
+const { lista, rango, buscarEn, orden, paginar } = require("../utils/consulta");
 
 const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 
-async function listar() {
-    return Proveedor.find();
+function listar(query = {}) {
+    const filtro = buscarEn(query.q, ["nombreComercial", "email"]);
+    const divisas = lista(query.divisa).map((d) => d.toUpperCase());
+    if (divisas.length) filtro.divisa = { $in: divisas };
+    const tipos = lista(query.tipoProducto);
+    if (tipos.length) filtro.tipoProducto = { $in: tipos };
+    const descuento = rango(query, "descuentosVolumen");
+    if (descuento) filtro.descuentosVolumen = descuento;
+    return paginar(Proveedor, filtro, query, { ordenar: orden(query.orden, ["nombreComercial", "descuentosVolumen", "divisa"]) });
 }
 
 async function obtenerPorId(id) {

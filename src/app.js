@@ -18,7 +18,7 @@ const origenes = (process.env.CORS_ORIGINS ?? ORIGENES_POR_DEFECTO)
 
 const app = express()
 
-app.use(cors({ origin: origenes, credentials: true }))
+app.use(cors({ origin: origenes, credentials: true, exposedHeaders: ['X-Total-Count'] }))
 app.use(express.json())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

@@ -12,13 +12,26 @@ router.use(autenticar, autorizar("administrador"));
  * /empleados:
  *   get:
  *     tags: [Empleado]
- *     summary: Listar todos los empleados
+ *     summary: Listar los empleados, con filtros, orden y paginación
  *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - $ref: '#/components/parameters/Q'
+ *       - $ref: '#/components/parameters/Genero'
+ *       - { name: cargo, in: query, schema: { type: string }, description: "reponedor, dependiente o encargado (admite varios separados por comas)" }
+ *       - { name: vacaciones, in: query, schema: { type: boolean } }
+ *       - { name: salarioMin, in: query, schema: { type: number } }
+ *       - { name: salarioMax, in: query, schema: { type: number } }
+ *       - { name: orden, in: query, schema: { type: string }, description: "nombre, email, cargo, salario, createdAt (con - delante para descendente)" }
+ *       - $ref: '#/components/parameters/Page'
+ *       - $ref: '#/components/parameters/Limit'
  *     responses:
+ *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       401: { $ref: '#/components/responses/NoAutenticado' }
  *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: OK
+ *         headers:
+ *           X-Total-Count: { $ref: '#/components/headers/TotalCount' }
  *         content:
  *           application/json:
  *             schema:

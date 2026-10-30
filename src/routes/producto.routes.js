@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getStatus, listar, obtenerPorId, crear, reemplazar, actualizar, eliminar } = require('../controllers/producto.controller');
+const { getStatus, listar, filtros, obtenerPorId, crear, reemplazar, actualizar, eliminar } = require('../controllers/producto.controller');
 const autenticar = require('../middleware/autenticar');
 const autorizar = require('../middleware/autorizar');
 
@@ -30,14 +30,27 @@ router.get('/status', getStatus);
  * /ropa:
  *   get:
  *     tags: [Productos]
- *     summary: Listar los productos, con filtro por tipo y paginación opcionales
+ *     summary: Listar los productos, con filtros, orden y paginación opcionales
  *     parameters:
- *       - { name: tipo, in: query, schema: { type: string }, description: Solo los productos de ese tipo }
- *       - { name: page, in: query, schema: { type: integer, minimum: 1 }, description: Página (empieza en 1), junto con limit }
- *       - { name: limit, in: query, schema: { type: integer, minimum: 1 }, description: Productos por página }
+ *       - $ref: "#/components/parameters/Q"
+ *       - { name: tipo, in: query, schema: { type: string }, description: "Uno o varios tipos separados por comas (camisa,polo)" }
+ *       - { name: grupo, in: query, schema: { type: string }, description: "arriba, abajo, vestidos, calzado, accesorios o mas (admite varios separados por comas)" }
+ *       - { name: talla, in: query, schema: { type: string }, description: "Tallas con stock, separadas por comas (S,M)" }
+ *       - { name: temporada, in: query, schema: { type: string }, description: Temporadas separadas por comas }
+ *       - { name: proveedor, in: query, schema: { type: string }, description: "_id de uno o varios proveedores separados por comas" }
+ *       - { name: precioMin, in: query, schema: { type: number }, description: Precio mínimo ya con el descuento aplicado }
+ *       - { name: precioMax, in: query, schema: { type: number }, description: Precio máximo ya con el descuento aplicado }
+ *       - { name: oferta, in: query, schema: { type: boolean }, description: Solo los productos con descuento }
+ *       - { name: disponible, in: query, schema: { type: boolean } }
+ *       - { name: orden, in: query, schema: { type: string, enum: [precio, -precio, descuento, -descuento, createdAt, -createdAt, tipo, -tipo] }, description: "El precio se ordena con el descuento aplicado" }
+ *       - $ref: "#/components/parameters/Page"
+ *       - $ref: "#/components/parameters/Limit"
  *     responses:
+ *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       200:
  *         description: OK
+ *         headers:
+ *           X-Total-Count: { $ref: "#/components/headers/TotalCount" }
  *         content:
  *           application/json:
  *             schema:
@@ -64,6 +77,21 @@ router.get('/status', getStatus);
  */
 router.get("/ropa", listar);
 router.post("/ropa", soloPersonal, crear);
+
+/**
+ * @openapi
+ * /ropa/filtros:
+ *   get:
+ *     tags: [Productos]
+ *     summary: Valores disponibles para filtrar el catálogo (grupos, tallas, temporadas, proveedores y rango de precios)
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema: { $ref: "#/components/schemas/FiltrosRopa" }
+ */
+router.get("/ropa/filtros", filtros);
 
 /**
  * @openapi

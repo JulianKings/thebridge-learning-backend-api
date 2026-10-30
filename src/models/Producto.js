@@ -12,6 +12,15 @@ const TIPOS = [
 
 const TALLAS = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
+const GRUPOS = {
+    arriba: ["camiseta", "camisa", "polo", "sudadera", "jersey", "chaqueta", "abrigo", "chaleco", "blazer"],
+    abajo: ["pantalon", "vaqueros", "pantalon_corto", "bermudas", "leggings", "falda"],
+    vestidos: ["vestido", "mono", "traje"],
+    calzado: ["zapatillas", "zapatos", "botas", "sandalias", "chanclas"],
+    accesorios: ["gorra", "sombrero", "bufanda", "guantes", "cinturon", "corbata", "pajarita"]
+};
+GRUPOS.mas = TIPOS.filter((tipo) => !Object.values(GRUPOS).flat().includes(tipo));
+
 const tallaSchema = new Schema(
     {
         talla_tipo: { type: String, enum: TALLAS, required: true },
@@ -38,3 +47,4 @@ const productoSchema = new Schema(
 module.exports = model("Producto", productoSchema, "Producto");
 module.exports.TIPOS = TIPOS;
 module.exports.TALLAS = TALLAS;
+module.exports.GRUPOS = GRUPOS;

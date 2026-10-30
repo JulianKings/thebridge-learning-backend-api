@@ -1,10 +1,10 @@
 const proveedorService = require("../services/proveedor.service");
 const { devolverStatus } = require("../utils/errores");
+const { enviarLista } = require("../utils/consulta");
 
 async function listar(req, res, next) {
     try {
-        const proveedores = await proveedorService.listar();
-        res.json(proveedores);
+        enviarLista(res, await proveedorService.listar(req.query));
     } catch (error) {
         next(devolverStatus(error));
     }

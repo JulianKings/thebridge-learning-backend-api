@@ -1,10 +1,10 @@
 const administradorService = require("../services/administrador.service");
 const { devolverStatus } = require("../utils/errores");
+const { enviarLista } = require("../utils/consulta");
 
 async function listar(req, res, next) {
     try {
-        const administradores = await administradorService.listar();
-        res.json(administradores);
+        enviarLista(res, await administradorService.listar(req.query));
     } catch (error) {
         next(devolverStatus(error));
     }

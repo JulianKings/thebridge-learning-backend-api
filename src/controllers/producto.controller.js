@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { devolverStatus } = require("../utils/errores");
+const { enviarLista } = require("../utils/consulta");
 const productoService = require("../services/producto.service");
 
 const getStatus = (req, res) => {
@@ -8,8 +9,15 @@ const getStatus = (req, res) => {
 
 async function listar(req, res, next) {
     try {
-        const productos = await productoService.listar(req.query);
-        res.json(productos);
+        enviarLista(res, await productoService.listar(req.query));
+    } catch (error) {
+        next(devolverStatus(error));
+    }
+}
+
+async function filtros(req, res, next) {
+    try {
+        res.json(await productoService.filtros());
     } catch (error) {
         next(devolverStatus(error));
     }
@@ -60,4 +68,4 @@ async function eliminar(req, res, next) {
     }
 }
 
-module.exports = {obtenerPorId, listar, getStatus, crear, reemplazar, actualizar, eliminar};
+module.exports = {obtenerPorId, listar, filtros, getStatus, crear, reemplazar, actualizar, eliminar};

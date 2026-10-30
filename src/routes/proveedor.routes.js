@@ -11,10 +11,21 @@ const soloAdministrador = [autenticar, autorizar("administrador")];
  * /proveedores:
  *   get:
  *     tags: [Proveedores]
- *     summary: Listar todos los proveedores
+ *     summary: Listar los proveedores, con filtros, orden y paginación
+ *     parameters:
+ *       - $ref: '#/components/parameters/Q'
+ *       - { name: divisa, in: query, schema: { type: string }, description: "Una o varias divisas separadas por comas (EUR,USD)" }
+ *       - { name: tipoProducto, in: query, schema: { type: string }, description: Tipos de producto separados por comas }
+ *       - { name: descuentosVolumenMin, in: query, schema: { type: number } }
+ *       - { name: descuentosVolumenMax, in: query, schema: { type: number } }
+ *       - { name: orden, in: query, schema: { type: string }, description: "nombreComercial, descuentosVolumen, divisa (con - delante para descendente)" }
+ *       - $ref: '#/components/parameters/Page'
+ *       - $ref: '#/components/parameters/Limit'
  *     responses:
  *       200:
  *         description: OK
+ *         headers:
+ *           X-Total-Count: { $ref: '#/components/headers/TotalCount' }
  *         content:
  *           application/json:
  *             schema:

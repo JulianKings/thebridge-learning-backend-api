@@ -7,17 +7,17 @@ const Administrador = require("../src/models/Administrador");
 const clientes = [
     {
         nombre: "Lucía Fernández",
-        email: "lucia.cliente@hilo.example",
+        email: "lucia.cliente@thebridge.tech",
         password: "Cliente1234!",
         fechaNacimiento: "14/03/1995",
         genero: "Mujer",
         cp: "28013",
         puntos: 120,
-        afiliado: "HILO-0001"
+        afiliado: "THEBRIDGE-0001"
     },
     {
         nombre: "Pablo Martín",
-        email: "pablo.cliente@hilo.example",
+        email: "pablo.cliente@thebridge.tech",
         password: "Cliente1234!",
         fechaNacimiento: "02/11/1988",
         genero: "Hombre",
@@ -26,7 +26,7 @@ const clientes = [
     },
     {
         nombre: "Carmen Ruiz",
-        email: "carmen.cliente@hilo.example",
+        email: "carmen.cliente@thebridge.tech",
         password: "Cliente1234!",
         fechaNacimiento: "27/07/2001",
         genero: "Mujer",
@@ -38,7 +38,7 @@ const clientes = [
 const empleados = [
     {
         nombre: "Javier López",
-        email: "javier.empleado@hilo.example",
+        email: "javier.empleado@thebridge.tech",
         password: "Empleado1234!",
         fechaNacimiento: "09/05/1990",
         genero: "Hombre",
@@ -51,7 +51,7 @@ const empleados = [
     },
     {
         nombre: "Marta Sánchez",
-        email: "marta.empleado@hilo.example",
+        email: "marta.empleado@thebridge.tech",
         password: "Empleado1234!",
         fechaNacimiento: "21/12/1997",
         genero: "Mujer",
@@ -64,7 +64,7 @@ const empleados = [
     },
     {
         nombre: "Andrés Gómez",
-        email: "andres.empleado@hilo.example",
+        email: "andres.empleado@thebridge.tech",
         password: "Empleado1234!",
         fechaNacimiento: "30/08/1984",
         genero: "Hombre",
@@ -78,8 +78,8 @@ const empleados = [
     // Cuenta especial para el comprobador de tests: se usa para probar las rutas protegidas
     // una vez exista el login. Tiene el cargo más alto para poder acceder a todo lo de empleados.
     {
-        nombre: "Tester Hilo",
-        email: "tester@hilo.example",
+        nombre: "Tester TheBridge",
+        email: "tester@thebridge.tech",
         password: "Tester1234!",
         fechaNacimiento: "01/01/1990",
         genero: "Hombre",
@@ -94,8 +94,8 @@ const empleados = [
 
 const administradores = [
     {
-        nombre: "Admin Hilo",
-        email: "admin@hilo.example",
+        nombre: "Admin TheBridge",
+        email: "admin@thebridge.tech",
         password: "Admin1234!",
         fechaNacimiento: "15/06/1985",
         genero: "Mujer"
