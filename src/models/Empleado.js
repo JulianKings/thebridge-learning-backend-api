@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { esFechaValida } = require("../utils/fecha");
+const { passwordPlugin } = require("../utils/password");
 const { GENEROS } = require("./Cliente");
 
 const CARGOS = ["reponedor", "dependiente", "encargado"];
@@ -71,6 +72,8 @@ const empleadoSchema = new mongoose.Schema({
         default: false
     }
 }, { timestamps: true });
+
+empleadoSchema.plugin(passwordPlugin);
 
 module.exports = mongoose.model("Empleado", empleadoSchema, "Empleado");
 module.exports.CARGOS = CARGOS;

@@ -1,11 +1,8 @@
 require("dotenv").config();
-const bcrypt = require("bcryptjs");
 const { conectar, desconectar } = require("../src/config/config");
 const Cliente = require("../src/models/Cliente");
 const Empleado = require("../src/models/Empleado");
 const Administrador = require("../src/models/Administrador");
-
-const SALT_ROUNDS = 10;
 
 const clientes = [
     {
@@ -105,16 +102,10 @@ const administradores = [
     }
 ];
 
-async function conPasswordHasheada(cuentas) {
-    return Promise.all(cuentas.map(async cuenta => ({
-        ...cuenta,
-        password: await bcrypt.hash(cuenta.password, SALT_ROUNDS)
-    })));
-}
-
+// create() (a diferencia de insertMany) ejecuta el pre("save") del modelo, que hashea la contraseña con bcrypt
 async function sembrarModelo(Modelo, cuentas) {
     await Modelo.deleteMany({ email: { $in: cuentas.map(c => c.email) } });
-    const insertados = await Modelo.insertMany(await conPasswordHasheada(cuentas));
+    const insertados = await Modelo.create(cuentas);
     console.log(`${Modelo.modelName}: ${insertados.length} cuentas (${insertados.map(c => c.email).join(", ")})`);
 }
 

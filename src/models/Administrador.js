@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { esFechaValida } = require("../utils/fecha");
+const { passwordPlugin } = require("../utils/password");
 const { GENEROS } = require("./Cliente");
 
 const administradorSchema = new mongoose.Schema({
@@ -32,5 +33,7 @@ const administradorSchema = new mongoose.Schema({
         enum: { values: GENEROS, message: "El género debe ser Hombre o Mujer" }
     }
 }, { timestamps: true });
+
+administradorSchema.plugin(passwordPlugin);
 
 module.exports = mongoose.model("Administrador", administradorSchema, "Administrador");

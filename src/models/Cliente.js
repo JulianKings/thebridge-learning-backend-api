@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { esFechaValida } = require("../utils/fecha");
+const { passwordPlugin } = require("../utils/password");
 
 const GENEROS = ["Hombre", "Mujer"];
 
@@ -48,6 +49,8 @@ const clienteSchema = new mongoose.Schema({
         trim: true
     }
 }, { timestamps: true });
+
+clienteSchema.plugin(passwordPlugin);
 
 module.exports = mongoose.model("Cliente", clienteSchema, "Cliente");
 module.exports.GENEROS = GENEROS;
