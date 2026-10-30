@@ -18,6 +18,7 @@ app.use('/', ropaRouter);
 app.use('/proveedores', proveedorRouter);
 app.use('/auth', authRouter);
 
+
 app.use((req, res) => {
   res.status(404).json({ message: `No existe la ruta ${req.method} ${req.originalUrl}` })
 })
