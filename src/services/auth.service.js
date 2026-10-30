@@ -30,4 +30,33 @@ async function registrar({nombre, email, password, fechaNacimiento, genero, cp, 
     return({ cliente, token: generarToken(cliente)}); 
 }
 
-module.exports = {registrar};
+async function login(email, password) {
+
+        const administrador = await Administrador.findOne({email}).select("+password");
+        if (administrador){
+            const coincideAdministrador = await Administrador.compararPassword(password);
+            if (coincideAdministrador){
+                return({administrador, token: generarToken(administrador)});
+            }
+        }
+
+        const empleado = await Empleado.findOne({email}).select("+password");
+        if (empleado){
+            const coincideEmpleado = await Empleado.compararPassword(password);
+            if (coincideEmpleado){
+                return({empleado, token: generarToken(empleado)});
+            }
+        }
+
+        const cliente = await Cliente.findOne({email}).select("+password");
+        if (cliente){
+            const coincideCliente = await cliente.compararPassword(password);
+            if (coincideCliente){
+                return({cliente, token: generarToken(cliente)});
+            }
+        }
+
+        return null;
+}
+
+module.exports = {registrar, login};
