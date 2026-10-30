@@ -1,6 +1,7 @@
 const express = require("express");
 const proveedorController = require("../controllers/proveedor.controller");
-
+const autenticar = require("../middlewares/autenticar.js");
+const autorizar = require("../middlewares/autorizar.js");
 const router = express.Router();
 
 /**
@@ -35,7 +36,7 @@ const router = express.Router();
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
 router.get("/", proveedorController.listar);
-router.post("/", proveedorController.crear);
+router.post("/", autenticar, autorizar("administrador"), proveedorController.crear);
 
 /**
  * @openapi
