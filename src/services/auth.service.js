@@ -3,10 +3,17 @@ const Cliente = require("../models/Cliente");
 const Administrador = require("../models/Administrador");
 const Empleado = require("../models/Empleado");
 
-function generarToken(cliente){
-    return jwt.sign({ 
-        id: cliente.id,
-        rol: cliente.rol,
+function obtenerRol(usuario) {
+    if (usuario instanceof Administrador) return "administrador";
+    if (usuario instanceof Empleado) return "empleado";
+    if (usuario instanceof Cliente) return "cliente";
+    throw new Error("No se puede generar un token para este tipo de usuario");
+}
+
+function generarToken(usuario){
+    return jwt.sign({
+        id: usuario.id,
+        rol: obtenerRol(usuario),
         },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN}
