@@ -2,6 +2,8 @@ const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 const { TIPOS, TALLAS } = require("../models/Producto");
 const Proveedor = require("../models/Proveedor");
+const { GENEROS } = require("../models/Cliente");
+const { CARGOS } = require("../models/Empleado");
 
 const DIVISAS = Proveedor.schema.path("divisa").enumValues;
 
@@ -31,6 +33,35 @@ const proveedorPropiedades = {
     descuentosVolumen: { type: "number", minimum: 0, maximum: 90, description: "Porcentaje", example: 10 }
 };
 
+const personaPropiedades = {
+    nombre: { type: "string", example: "Lucía Fernández" },
+    email: { type: "string", format: "email", example: "lucia@correo.es" },
+    fechaNacimiento: { type: "string", description: "DD/MM/YYYY", example: "14/03/1995" },
+    genero: { type: "string", enum: GENEROS }
+};
+
+const conPassword = (propiedades) => ({ ...propiedades, password: { type: "string", format: "password", writeOnly: true } });
+
+const clientePropiedades = {
+    ...personaPropiedades,
+    cp: { type: "string", example: "28013" },
+    puntos: { type: "integer", minimum: 0, example: 120 },
+    afiliado: { type: "string", example: "HILO-0001" }
+};
+
+const empleadoPropiedades = {
+    ...personaPropiedades,
+    cp: { type: "string", example: "28004" },
+    cargo: { type: "string", enum: CARGOS },
+    altaSS: { type: "string", description: "DD/MM/YYYY" },
+    bajaSS: { type: "string", description: "DD/MM/YYYY" },
+    salario: { type: "number", minimum: 0, example: 1350 },
+    horario: { type: "string", example: "L-V 10:00-18:00" },
+    vacaciones: { type: "boolean", default: false }
+};
+
+const conId = (ref) => ({ allOf: [{ type: "object", properties: { _id: { type: "string" } } }, { $ref: ref }] });
+
 const definicion = {
     openapi: "3.0.3",
     info: {
@@ -42,9 +73,17 @@ const definicion = {
     tags: [
         { name: "Estado" },
         { name: "Productos" },
-        { name: "Proveedores" }
+        { name: "Proveedores" },
+        { name: "Auth" },
+        { name: "Compras" },
+        { name: "Clientes" },
+        { name: "Empleado" },
+        { name: "Administrador" }
     ],
     components: {
+        securitySchemes: {
+            bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" }
+        },
         parameters: {
             Id: {
                 name: "id",
@@ -57,7 +96,7 @@ const definicion = {
         schemas: {
             Error: {
                 type: "object",
-                properties: { message: { type: "string" } }
+                properties: { error: { type: "string" } }
             },
             Talla: {
                 type: "object",
@@ -98,6 +137,73 @@ const definicion = {
                 type: "object",
                 properties: proveedorPropiedades
             },
+            RegistroInput: {
+                type: "object",
+                required: ["nombre", "email", "password", "fechaNacimiento", "genero", "cp"],
+                properties: conPassword({ ...personaPropiedades, cp: clientePropiedades.cp, afiliado: clientePropiedades.afiliado })
+            },
+            LoginInput: {
+                type: "object",
+                required: ["email", "password"],
+                properties: { email: personaPropiedades.email, password: { type: "string", format: "password" } }
+            },
+            Cliente: { type: "object", properties: { _id: { type: "string" }, ...clientePropiedades } },
+            ClientePatch: { type: "object", properties: conPassword(clientePropiedades) },
+            EmpleadoInput: {
+                type: "object",
+                required: ["nombre", "email", "password", "fechaNacimiento", "genero", "cp", "cargo", "salario", "horario"],
+                properties: conPassword(empleadoPropiedades)
+            },
+            EmpleadoPatch: { type: "object", properties: conPassword(empleadoPropiedades) },
+            Empleado: conId("#/components/schemas/EmpleadoPatch"),
+            AdministradorInput: {
+                type: "object",
+                required: ["nombre", "email", "password", "fechaNacimiento", "genero"],
+                properties: conPassword(personaPropiedades)
+            },
+            AdministradorPatch: { type: "object", properties: conPassword(personaPropiedades) },
+            Administrador: conId("#/components/schemas/AdministradorPatch"),
+            CompraInput: {
+                type: "object",
+                required: ["productos"],
+                properties: {
+                    productos: {
+                        type: "array",
+                        minItems: 1,
+                        items: {
+                            type: "object",
+                            required: ["producto", "talla", "cantidad"],
+                            properties: {
+                                producto: { type: "string", description: "_id del producto" },
+                                talla: { type: "string", enum: TALLAS },
+                                cantidad: { type: "integer", minimum: 1 }
+                            }
+                        }
+                    }
+                }
+            },
+            Compra: {
+                type: "object",
+                properties: {
+                    _id: { type: "string" },
+                    cliente: { type: "string" },
+                    productos: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                producto: { type: "string" },
+                                talla: { type: "string" },
+                                cantidad: { type: "integer" },
+                                precio: { type: "number", description: "Precio unitario con descuento en el momento de la compra" }
+                            }
+                        }
+                    },
+                    total: { type: "number" },
+                    puntos: { type: "integer", description: "1 punto por euro" },
+                    createdAt: { type: "string", format: "date-time" }
+                }
+            },
             Proveedor: {
                 allOf: [
                     { type: "object", properties: { _id: { type: "string" } } },
@@ -112,6 +218,14 @@ const definicion = {
             },
             NoEncontrado: {
                 description: "No existe ningún documento con ese id",
+                content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
+            },
+            NoAutenticado: {
+                description: "Falta el token o no es válido",
+                content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
+            },
+            SinPermiso: {
+                description: "El rol del token no tiene permiso para esta acción",
                 content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
             },
             Duplicado: {

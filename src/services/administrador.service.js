@@ -18,7 +18,7 @@ async function crear(datos) {
 
 async function reemplazar(id, datos) {
     const { _id, ...resto } = datos;
-    const proveedor = await Administrador.findOneAndReplace({ _id: id }, resto, opcionesActualizacion);
+    const administrador = await Administrador.findOneAndReplace({ _id: id }, resto, opcionesActualizacion);
     if (!administrador) throw noEncontrado(id);
     return administrador;
 }

@@ -2,6 +2,11 @@ const jwt = require("jsonwebtoken");
 const Cliente = require("../models/Cliente");
 const Administrador = require("../models/Administrador");
 const Empleado = require("../models/Empleado");
+const { crearError } = require("../utils/errores");
+
+const MODELOS = { cliente: Cliente, empleado: Empleado, administrador: Administrador };
+
+const normalizarEmail = (email) => String(email ?? "").trim().toLowerCase();
 
 function obtenerRol(usuario) {
     if (usuario instanceof Administrador) return "administrador";
@@ -21,6 +26,7 @@ function generarToken(usuario){
 }
 
 async function registrar({nombre, email, password, fechaNacimiento, genero, cp, afiliado}) {
+    email = normalizarEmail(email);
     const administrador = await Administrador.findOne({email});
     const empleado = await Empleado.findOne({email});
     const clienteExistente = await Cliente.findOne({email});
@@ -32,10 +38,11 @@ async function registrar({nombre, email, password, fechaNacimiento, genero, cp, 
 }
 
 async function login(email, password) {
+        email = normalizarEmail(email);
 
         const administrador = await Administrador.findOne({email}).select("+password");
         if (administrador){
-            const coincideAdministrador = await Administrador.compararPassword(password);
+            const coincideAdministrador = await administrador.compararPassword(password);
             if (coincideAdministrador){
                 return({administrador, token: generarToken(administrador)});
             }
@@ -43,7 +50,7 @@ async function login(email, password) {
 
         const empleado = await Empleado.findOne({email}).select("+password");
         if (empleado){
-            const coincideEmpleado = await Empleado.compararPassword(password);
+            const coincideEmpleado = await empleado.compararPassword(password);
             if (coincideEmpleado){
                 return({empleado, token: generarToken(empleado)});
             }
@@ -60,4 +67,10 @@ async function login(email, password) {
         return null;
 }
 
-module.exports = {registrar, login};
+async function perfil({ id, rol }) {
+    const usuario = await MODELOS[rol]?.findById(id);
+    if (!usuario) throw crearError(404, "El usuario del token ya no existe");
+    return usuario;
+}
+
+module.exports = {registrar, login, perfil};

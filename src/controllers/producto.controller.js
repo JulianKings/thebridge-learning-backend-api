@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
+const { devolverStatus } = require("../utils/errores");
 const productoService = require("../services/producto.service");
-
 
 const getStatus = (req, res) => {
     res.status(200).json({ status: "ok", db: mongoose.connection.readyState === 1 ? "conectada" : "no conectada"});
@@ -8,7 +8,7 @@ const getStatus = (req, res) => {
 
 async function listar(req, res, next) {
     try {
-        const productos = await productoService.listar();
+        const productos = await productoService.listar(req.query);
         res.json(productos);
     } catch (error) {
         next(devolverStatus(error));
@@ -58,22 +58,6 @@ async function eliminar(req, res, next) {
     } catch (error) {
         next(devolverStatus(error));
     }
-}
-
-
-function devolverStatus(error) {
-    if (error.status) return error;
-    if (error.name === "ValidationError") {
-        error.status = 400;
-        error.message = Object.values(error.errors).map(e => e.message).join(", ");
-    } else if (error.name === "CastError") {
-        error.status = 400;
-        error.message = `Valor no válido para ${error.path}: ${error.value}`;
-    } else if (error.code === 11000) {
-        error.status = 409;
-        error.message = `Ya existe un producto con ese ${Object.keys(error.keyValue).join(", ")}`;
-    }
-    return error;
 }
 
 module.exports = {obtenerPorId, listar, getStatus, crear, reemplazar, actualizar, eliminar};

@@ -3,9 +3,16 @@ const Proveedor = require("../models/Proveedor");
 
 const opcionesActualizacion = { returnDocument: "after", runValidators: true };
 
-async function listar() {
-    return Producto.find();
+async function listar({ tipo, page, limit } = {}) {
+    const consulta = Producto.find(tipo ? { tipo } : {});
+    const porPagina = Number.parseInt(limit);
+    if (porPagina > 0) {
+        const pagina = Math.max(Number.parseInt(page) || 1, 1);
+        consulta.sort({ _id: 1 }).skip((pagina - 1) * porPagina).limit(porPagina);
+    }
+    return consulta;
 }
+
 async function obtenerPorId(id) {
     const producto = await Producto.findById(id);
     if (!producto) throw noEncontrado(id);

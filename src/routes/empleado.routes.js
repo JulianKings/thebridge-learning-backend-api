@@ -1,15 +1,22 @@
 const express = require("express");
+const autenticar = require("../middleware/autenticar");
+const autorizar = require("../middleware/autorizar");
 const empleadoController = require("../controllers/empleado.controller");
 
 const router = express.Router();
 
+router.use(autenticar, autorizar("administrador"));
+
 /**
  * @openapi
- * /empleado:
+ * /empleados:
  *   get:
  *     tags: [Empleado]
  *     summary: Listar todos los empleados
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: OK
  *         content:
@@ -20,12 +27,15 @@ const router = express.Router();
  *   post:
  *     tags: [Empleado]
  *     summary: Crear un empleado
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/EmpleadoInput' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       201:
  *         description: Empleado creado
  *         content:
@@ -34,18 +44,21 @@ const router = express.Router();
  *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
-router.get("/", empleadoControllerController.listar);
-router.post("/", empleadoControllerController.crear);
+router.get("/", empleadoController.listar);
+router.post("/", empleadoController.crear);
 
 /**
  * @openapi
- * /empleado/{id}:
+ * /empleados/{id}:
  *   parameters:
- *     - $ref: '#/empleado/parameters/Id'
+ *     - $ref: '#/components/parameters/Id'
  *   get:
  *     tags: [Empleado]
- *     summary: Obtener un proveedor por id
+ *     summary: Obtener un empleado por id
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: OK
  *         content:
@@ -56,12 +69,15 @@ router.post("/", empleadoControllerController.crear);
  *   put:
  *     tags: [Empleado]
  *     summary: Reemplazar un empleado completo
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/EmpleadoInput' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: Empleado reemplazado
  *         content:
@@ -73,12 +89,15 @@ router.post("/", empleadoControllerController.crear);
  *   patch:
  *     tags: [Empleado]
  *     summary: Actualizar parcialmente un Empleado
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/EmpleadoPatch' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: Empleado actualizado
  *         content:
@@ -90,7 +109,10 @@ router.post("/", empleadoControllerController.crear);
  *   delete:
  *     tags: [Empleado]
  *     summary: Eliminar un empleado
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       204: { description: Empleado eliminado }
  *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       404: { $ref: '#/components/responses/NoEncontrado' }

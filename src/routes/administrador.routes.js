@@ -1,15 +1,22 @@
 const express = require("express");
+const autenticar = require("../middleware/autenticar");
+const autorizar = require("../middleware/autorizar");
 const administradorController = require("../controllers/administrador.controller");
 
 const router = express.Router();
 
+router.use(autenticar, autorizar("administrador"));
+
 /**
  * @openapi
- * /administrador:
+ * /administradores:
  *   get:
  *     tags: [Administrador]
  *     summary: Listar todos los administrador
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: OK
  *         content:
@@ -20,12 +27,15 @@ const router = express.Router();
  *   post:
  *     tags: [Administrador]
  *     summary: Crear un administrador
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/AdministradorInput' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       201:
  *         description: Administrador creado
  *         content:
@@ -39,13 +49,16 @@ router.post("/", administradorController.crear);
 
 /**
  * @openapi
- * /administrador/{id}:
+ * /administradores/{id}:
  *   parameters:
  *     - $ref: '#/components/parameters/Id'
  *   get:
  *     tags: [Administrador]
  *     summary: Obtener un administrador por id
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: OK
  *         content:
@@ -56,12 +69,15 @@ router.post("/", administradorController.crear);
  *   put:
  *     tags: [Administrador]
  *     summary: Reemplazar un administrador completo
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/AdministradorInput' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: Administrador reemplazado
  *         content:
@@ -73,12 +89,15 @@ router.post("/", administradorController.crear);
  *   patch:
  *     tags: [Administrador]
  *     summary: Actualizar parcialmente un administrador
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/AdministradorPatch' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: Administrador actualizado
  *         content:
@@ -90,7 +109,10 @@ router.post("/", administradorController.crear);
  *   delete:
  *     tags: [Administrador]
  *     summary: Eliminar un administrador
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       204: { description: Administrador eliminado }
  *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       404: { $ref: '#/components/responses/NoEncontrado' }

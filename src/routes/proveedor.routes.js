@@ -4,6 +4,8 @@ const autenticar = require("../middleware/autenticar");
 const autorizar = require("../middleware/autorizar");
 const router = express.Router();
 
+const soloAdministrador = [autenticar, autorizar("administrador")];
+
 /**
  * @openapi
  * /proveedores:
@@ -21,12 +23,15 @@ const router = express.Router();
  *   post:
  *     tags: [Proveedores]
  *     summary: Crear un proveedor
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/ProveedorInput' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       201:
  *         description: Proveedor creado
  *         content:
@@ -36,7 +41,7 @@ const router = express.Router();
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
 router.get("/", proveedorController.listar);
-router.post("/", autenticar, autorizar("administrador"), proveedorController.crear);
+router.post("/", soloAdministrador, proveedorController.crear);
 
 /**
  * @openapi
@@ -57,12 +62,15 @@ router.post("/", autenticar, autorizar("administrador"), proveedorController.cre
  *   put:
  *     tags: [Proveedores]
  *     summary: Reemplazar un proveedor completo
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/ProveedorInput' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: Proveedor reemplazado
  *         content:
@@ -74,12 +82,15 @@ router.post("/", autenticar, autorizar("administrador"), proveedorController.cre
  *   patch:
  *     tags: [Proveedores]
  *     summary: Actualizar parcialmente un proveedor
+ *     security: [{ bearerAuth: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema: { $ref: '#/components/schemas/ProveedorPatch' }
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       200:
  *         description: Proveedor actualizado
  *         content:
@@ -91,14 +102,17 @@ router.post("/", autenticar, autorizar("administrador"), proveedorController.cre
  *   delete:
  *     tags: [Proveedores]
  *     summary: Eliminar un proveedor
+ *     security: [{ bearerAuth: [] }]
  *     responses:
+ *       401: { $ref: '#/components/responses/NoAutenticado' }
+ *       403: { $ref: '#/components/responses/SinPermiso' }
  *       204: { description: Proveedor eliminado }
  *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       404: { $ref: '#/components/responses/NoEncontrado' }
  */
 router.get("/:id", proveedorController.obtenerPorId);
-router.put("/:id", proveedorController.reemplazar);
-router.patch("/:id", proveedorController.actualizar);
-router.delete("/:id", proveedorController.eliminar);
+router.put("/:id", soloAdministrador, proveedorController.reemplazar);
+router.patch("/:id", soloAdministrador, proveedorController.actualizar);
+router.delete("/:id", soloAdministrador, proveedorController.eliminar);
 
 module.exports = router;

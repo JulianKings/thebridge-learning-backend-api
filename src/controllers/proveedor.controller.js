@@ -1,4 +1,5 @@
 const proveedorService = require("../services/proveedor.service");
+const { devolverStatus } = require("../utils/errores");
 
 async function listar(req, res, next) {
     try {
@@ -52,21 +53,6 @@ async function eliminar(req, res, next) {
     } catch (error) {
         next(devolverStatus(error));
     }
-}
-
-function devolverStatus(error) {
-    if (error.status) return error;
-    if (error.name === "ValidationError") {
-        error.status = 400;
-        error.message = Object.values(error.errors).map(e => e.message).join(", ");
-    } else if (error.name === "CastError") {
-        error.status = 400;
-        error.message = `Valor no válido para ${error.path}: ${error.value}`;
-    } else if (error.code === 11000) {
-        error.status = 409;
-        error.message = `Ya existe un proveedor con ese ${Object.keys(error.keyValue).join(", ")}`;
-    }
-    return error;
 }
 
 module.exports = { listar, obtenerPorId, crear, reemplazar, actualizar, eliminar };
