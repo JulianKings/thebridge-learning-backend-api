@@ -16,6 +16,7 @@ app.get('/api-docs.json', (req, res) => res.json(swaggerSpec))
 app.use('/', ropaRouter);
 app.use('/proveedores', proveedorRouter);
 
+
 app.use((req, res) => {
   res.status(404).json({ message: `No existe la ruta ${req.method} ${req.originalUrl}` })
 })
