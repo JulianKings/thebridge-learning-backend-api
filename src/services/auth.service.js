@@ -23,7 +23,8 @@ function generarToken(usuario){
 async function registrar({nombre, email, password, fechaNacimiento, genero, cp, afiliado}) {
     const administrador = await Administrador.findOne({email});
     const empleado = await Empleado.findOne({email});
-    if (administrador || empleado){
+    const clienteExistente = await Cliente.findOne({email});
+    if (administrador || empleado || clienteExistente){
         return null;
     }
     const cliente = await Cliente.create({nombre, email, password, fechaNacimiento, genero, cp, afiliado});
