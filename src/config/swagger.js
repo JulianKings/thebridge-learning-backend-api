@@ -8,7 +8,6 @@ const { ESTADOS } = require("../models/Compra");
 
 const DIVISAS = Proveedor.schema.path("divisa").enumValues;
 
-// Propiedades compartidas por el body de POST/PUT (con required) y el de PATCH (sin required)
 const productoPropiedades = {
     tipo: { type: "string", enum: TIPOS, example: "camiseta" },
     precio: { type: "number", minimum: 0, example: 19.99 },

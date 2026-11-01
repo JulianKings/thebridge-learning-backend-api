@@ -102,7 +102,6 @@ const administradores = [
     }
 ];
 
-// create() (a diferencia de insertMany) ejecuta el pre("save") del modelo, que hashea la contraseña con bcrypt
 async function sembrarModelo(Modelo, cuentas) {
     await Modelo.deleteMany({ email: { $in: cuentas.map(c => c.email) } });
     const insertados = await Modelo.create(cuentas);

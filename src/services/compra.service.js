@@ -52,21 +52,6 @@ function devolverStock(lineas) {
     );
 }
 
-async function crear(clienteId, lineas) {
-    const productos = await validarLineas(lineas);
-    await descontarStock(productos);
-    try {
-        const total = redondear(productos.reduce((suma, l) => suma + l.precio * l.cantidad, 0));
-        const puntos = Math.floor(total);
-        const compra = await Compra.create({ cliente: clienteId, productos, total, puntos });
-        await Cliente.findByIdAndUpdate(clienteId, { $inc: { puntos } });
-        return compra;
-    } catch (error) {
-        await devolverStock(productos);
-        throw error;
-    }
-}
-
 function filtroCompras(query) {
     const filtro = {};
     const clientes = ids(query.cliente, "cliente");
@@ -82,6 +67,21 @@ function filtroCompras(query) {
     const total = rango(query, "total");
     if (total) filtro.total = total;
     return filtro;
+}
+
+async function crear(clienteId, lineas) {
+    const productos = await validarLineas(lineas);
+    await descontarStock(productos);
+    try {
+        const total = redondear(productos.reduce((suma, l) => suma + l.precio * l.cantidad, 0));
+        const puntos = Math.floor(total);
+        const compra = await Compra.create({ cliente: clienteId, productos, total, puntos });
+        await Cliente.findByIdAndUpdate(clienteId, { $inc: { puntos } });
+        return compra;
+    } catch (error) {
+        await devolverStock(productos);
+        throw error;
+    }
 }
 
 const ordenCompras = (query) => orden(query.orden, ["createdAt", "total", "puntos"], { porDefecto: { createdAt: -1, _id: 1 } });

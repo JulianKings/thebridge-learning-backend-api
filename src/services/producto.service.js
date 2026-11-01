@@ -41,22 +41,6 @@ function filtroProductos(query) {
     return filtro;
 }
 
-async function listar(query = {}) {
-    const pipeline = [{ $match: filtroProductos(query) }, { $addFields: { precioFinal: PRECIO_FINAL } }];
-    const precio = rango(query, "precio");
-    if (precio) pipeline.push({ $match: { precioFinal: precio } });
-    pipeline.push({ $sort: orden(query.orden, ["precio", "descuento", "createdAt", "tipo"], { alias: { precio: "precioFinal" } }) });
-    const pagina = paginacion(query);
-    pipeline.push({
-        $facet: {
-            datos: [...(pagina ? [{ $skip: pagina.skip }, { $limit: pagina.limit }] : []), { $unset: "precioFinal" }],
-            total: [{ $count: "n" }]
-        }
-    });
-    const [{ datos, total }] = await Producto.aggregate(pipeline);
-    return { datos, total: total[0]?.n ?? 0 };
-}
-
 async function filtros() {
     const [tipos, tallas, temporadas, idsProveedor, [precio]] = await Promise.all([
         Producto.distinct("tipo"),
@@ -78,6 +62,22 @@ async function filtros() {
         proveedores,
         precio: { min: precio?.min ?? 0, max: precio?.max ?? 0 }
     };
+}
+
+async function listar(query = {}) {
+    const pipeline = [{ $match: filtroProductos(query) }, { $addFields: { precioFinal: PRECIO_FINAL } }];
+    const precio = rango(query, "precio");
+    if (precio) pipeline.push({ $match: { precioFinal: precio } });
+    pipeline.push({ $sort: orden(query.orden, ["precio", "descuento", "createdAt", "tipo"], { alias: { precio: "precioFinal" } }) });
+    const pagina = paginacion(query);
+    pipeline.push({
+        $facet: {
+            datos: [...(pagina ? [{ $skip: pagina.skip }, { $limit: pagina.limit }] : []), { $unset: "precioFinal" }],
+            total: [{ $count: "n" }]
+        }
+    });
+    const [{ datos, total }] = await Producto.aggregate(pipeline);
+    return { datos, total: total[0]?.n ?? 0 };
 }
 
 async function obtenerPorId(id) {

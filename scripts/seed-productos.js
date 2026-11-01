@@ -4,11 +4,9 @@ const Proveedor = require("../src/models/Proveedor");
 const Producto = require("../src/models/Producto");
 
 // Requiere haber ejecutado antes "npm run seed" para que existan los proveedores.
-// Cada producto guarda el _id real de un proveedor existente, así el populate("proveedor") funciona.
 
 const PRODUCTOS_POR_PROVEEDOR = 5;
 
-// Relaciona los tipoProducto de los proveedores con los tipos válidos del modelo Producto
 const TIPOS_POR_CATEGORIA = {
     "ropa de mujer": ["vestido", "falda", "blazer", "camisa"],
     "ropa de hombre": ["camisa", "polo", "pantalon", "jersey"],
