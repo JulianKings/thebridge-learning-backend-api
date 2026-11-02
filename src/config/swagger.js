@@ -107,7 +107,14 @@ const definicion = {
         schemas: {
             Error: {
                 type: "object",
-                properties: { error: { type: "string" } }
+                properties: {
+                    error: { type: "string", description: "Todos los mensajes en un solo texto" },
+                    errores: {
+                        type: "array",
+                        description: "Solo en errores de validación: a qué campo pertenece cada mensaje",
+                        items: { type: "object", properties: { campo: { type: "string", example: "precio" }, mensaje: { type: "string" } } }
+                    }
+                }
             },
             Talla: {
                 type: "object",

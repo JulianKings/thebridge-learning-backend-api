@@ -33,7 +33,7 @@ function filtroProductos(query) {
     if (booleano(query.oferta, "oferta")) filtro.descuento = { $gt: 0 };
     if (query.q) {
         filtro.$or = [
-            { tipo: texto(String(query.q).trim().replace(/s+/g, "_")) },
+            { tipo: texto(String(query.q).trim().replace(/\s+/g, "_")) },
             { temporada: texto(query.q) },
             { evento: texto(query.q) }
         ];
