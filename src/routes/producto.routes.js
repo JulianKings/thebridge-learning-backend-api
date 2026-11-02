@@ -3,6 +3,7 @@ const router = express.Router();
 const { getStatus, listar, filtros, obtenerPorId, crear, reemplazar, actualizar, eliminar } = require('../controllers/producto.controller');
 const autenticar = require('../middleware/autenticar');
 const autorizar = require('../middleware/autorizar');
+const productoValidator = require('../validators/producto.validator');
 
 const soloPersonal = [autenticar, autorizar('empleado', 'administrador')];
 
@@ -76,7 +77,7 @@ router.get('/status', getStatus);
  *       400: { $ref: '#/components/responses/ErrorValidacion' }
  */
 router.get("/ropa", listar);
-router.post("/ropa", soloPersonal, crear);
+router.post("/ropa", soloPersonal, productoValidator.crear, crear);
 
 /**
  * @openapi
@@ -159,8 +160,8 @@ router.get("/ropa/filtros", filtros);
  *       404: { $ref: '#/components/responses/NoEncontrado' }
  */
 router.get("/ropa/:id", obtenerPorId);
-router.put("/ropa/:id", soloPersonal, reemplazar);
-router.patch("/ropa/:id", soloPersonal, actualizar);
+router.put("/ropa/:id", soloPersonal, productoValidator.reemplazar, reemplazar);
+router.patch("/ropa/:id", soloPersonal, productoValidator.actualizar, actualizar);
 router.delete("/ropa/:id", soloPersonal, eliminar);
 
 module.exports = router;

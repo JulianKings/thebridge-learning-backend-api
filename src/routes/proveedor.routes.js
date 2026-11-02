@@ -1,5 +1,6 @@
 const express = require("express");
 const proveedorController = require("../controllers/proveedor.controller");
+const proveedorValidator = require("../validators/proveedor.validator");
 const autenticar = require("../middleware/autenticar");
 const autorizar = require("../middleware/autorizar");
 const router = express.Router();
@@ -52,7 +53,7 @@ const soloAdministrador = [autenticar, autorizar("administrador")];
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
 router.get("/", proveedorController.listar);
-router.post("/", soloAdministrador, proveedorController.crear);
+router.post("/", soloAdministrador, proveedorValidator.crear, proveedorController.crear);
 
 /**
  * @openapi
@@ -122,8 +123,8 @@ router.post("/", soloAdministrador, proveedorController.crear);
  *       404: { $ref: '#/components/responses/NoEncontrado' }
  */
 router.get("/:id", proveedorController.obtenerPorId);
-router.put("/:id", soloAdministrador, proveedorController.reemplazar);
-router.patch("/:id", soloAdministrador, proveedorController.actualizar);
+router.put("/:id", soloAdministrador, proveedorValidator.reemplazar, proveedorController.reemplazar);
+router.patch("/:id", soloAdministrador, proveedorValidator.actualizar, proveedorController.actualizar);
 router.delete("/:id", soloAdministrador, proveedorController.eliminar);
 
 module.exports = router;

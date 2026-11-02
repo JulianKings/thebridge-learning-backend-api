@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const DIVISAS = ["EUR", "USD", "GBP", "KRW", "CNY", "JPY"];
+
 const proveedorSchema = new mongoose.Schema({
     nombreComercial: {
         type: String,
@@ -49,7 +51,7 @@ const proveedorSchema = new mongoose.Schema({
         required: [true, "La divisa es obligatoria"],
         trim: true,
         uppercase: true,
-        enum: { values: ["EUR", "USD", "GBP", "KRW", "CNY", "JPY"], message: "La divisa debe ser EUR, USD, GBP, KRW, CNY o JPY" }
+        enum: { values: DIVISAS, message: "La divisa debe ser EUR, USD, GBP, KRW, CNY o JPY" }
     },
     condicionesPago: {
         type: String,
@@ -71,3 +73,4 @@ const proveedorSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Proveedor", proveedorSchema, "Proveedor");
+module.exports.DIVISAS = DIVISAS;

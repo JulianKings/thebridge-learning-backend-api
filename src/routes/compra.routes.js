@@ -2,6 +2,7 @@ const express = require("express");
 const { crear, mias, listar, obtenerPorId, cambiarEstado, eliminar } = require("../controllers/compra.controller");
 const autenticar = require("../middleware/autenticar");
 const autorizar = require("../middleware/autorizar");
+const compraValidator = require("../validators/compra.validator");
 
 const router = express.Router();
 
@@ -60,7 +61,7 @@ const router = express.Router();
  *       401: { $ref: '#/components/responses/NoAutenticado' }
  *       403: { $ref: '#/components/responses/SinPermiso' }
  */
-router.post("/", autenticar, autorizar("cliente"), crear);
+router.post("/", autenticar, autorizar("cliente"), compraValidator.crear, crear);
 router.get("/", autenticar, autorizar("empleado", "administrador"), listar);
 
 /**
@@ -146,7 +147,7 @@ router.get("/mias", autenticar, autorizar("cliente"), mias);
  *       404: { $ref: '#/components/responses/NoEncontrado' }
  */
 router.get("/:id", autenticar, obtenerPorId);
-router.patch("/:id", autenticar, autorizar("empleado", "administrador"), cambiarEstado);
+router.patch("/:id", autenticar, autorizar("empleado", "administrador"), compraValidator.cambiarEstado, cambiarEstado);
 router.delete("/:id", autenticar, autorizar("administrador"), eliminar);
 
 module.exports = router;

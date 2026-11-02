@@ -1,5 +1,6 @@
 const express = require("express");
 const clienteController = require("../controllers/cliente.controller");
+const clienteValidator = require("../validators/cliente.validator");
 const autenticar = require("../middleware/autenticar");
 const autorizar = require("../middleware/autorizar");
 
@@ -56,7 +57,7 @@ router.use(autenticar, autorizar("administrador"));
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
 router.get("/", clienteController.listar);
-router.post("/", clienteController.crear);
+router.post("/", clienteValidator.crear, clienteController.crear);
 
 /**
  * @openapi
@@ -129,8 +130,8 @@ router.post("/", clienteController.crear);
  *       404: { $ref: '#/components/responses/NoEncontrado' }
  */
 router.get("/:id", clienteController.obtenerPorId);
-router.put("/:id", clienteController.reemplazar);
-router.patch("/:id", clienteController.actualizar);
+router.put("/:id", clienteValidator.reemplazar, clienteController.reemplazar);
+router.patch("/:id", clienteValidator.actualizar, clienteController.actualizar);
 router.delete("/:id", clienteController.eliminar);
 
 module.exports = router;

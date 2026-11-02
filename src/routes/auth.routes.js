@@ -1,6 +1,7 @@
 const express = require("express");
 const { registro, login, perfil } = require("../controllers/auth.controller");
 const autenticar = require("../middleware/autenticar");
+const clienteValidator = require("../validators/cliente.validator");
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ const router = express.Router();
  *       400: { $ref: '#/components/responses/ErrorValidacion' }
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
-router.post("/registro", registro);
+router.post("/registro", clienteValidator.registro, registro);
 
 /**
  * @openapi

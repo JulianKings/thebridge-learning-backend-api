@@ -2,6 +2,7 @@ const express = require("express");
 const autenticar = require("../middleware/autenticar");
 const autorizar = require("../middleware/autorizar");
 const administradorController = require("../controllers/administrador.controller");
+const administradorValidator = require("../validators/administrador.validator");
 
 const router = express.Router();
 
@@ -54,7 +55,7 @@ router.use(autenticar, autorizar("administrador"));
  *       409: { $ref: '#/components/responses/Duplicado' }
  */
 router.get("/", administradorController.listar);
-router.post("/", administradorController.crear);
+router.post("/", administradorValidator.crear, administradorController.crear);
 
 /**
  * @openapi
@@ -127,8 +128,8 @@ router.post("/", administradorController.crear);
  *       404: { $ref: '#/components/responses/NoEncontrado' }
  */
 router.get("/:id", administradorController.obtenerPorId);
-router.put("/:id", administradorController.reemplazar);
-router.patch("/:id", administradorController.actualizar);
+router.put("/:id", administradorValidator.reemplazar, administradorController.reemplazar);
+router.patch("/:id", administradorValidator.actualizar, administradorController.actualizar);
 router.delete("/:id", administradorController.eliminar);
 
 module.exports = router;

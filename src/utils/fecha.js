@@ -7,4 +7,10 @@ function esFechaValida(valor) {
     return fecha.getFullYear() === anio && fecha.getMonth() === mes - 1 && fecha.getDate() === dia;
 }
 
-module.exports = { esFechaValida };
+// Convierte una fecha DD/MM/YYYY (ya validada) en Date
+function aFecha(valor) {
+    const [dia, mes, anio] = valor.split("/").map(Number);
+    return new Date(anio, mes - 1, dia);
+}
+
+module.exports = { esFechaValida, aFecha };
