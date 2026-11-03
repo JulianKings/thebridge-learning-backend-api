@@ -14,8 +14,7 @@ const persona = {
             .isLength({ min: 8 }).withMessage(MENSAJE_PASSWORD)
             .matches(/\p{L}/u).withMessage(MENSAJE_PASSWORD)
             .matches(/\d/).withMessage(MENSAJE_PASSWORD)
-            // bcrypt solo tiene en cuenta los primeros 72 bytes
-            .isLength({ max: 72 }).withMessage("La contraseña no puede superar los 72 caracteres")
+            .isLength({ max: 18 }).withMessage("La contraseña no puede superar los 18 caracteres")
     },
     fechaNacimiento: {
         obligatorio: "La fecha de nacimiento es obligatoria",
