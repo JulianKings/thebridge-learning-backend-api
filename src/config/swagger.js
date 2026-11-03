@@ -69,7 +69,7 @@ const definicion = {
         version: "0.1.0",
         description: "API de una tienda de ropa"
     },
-    servers: [{ url: "/" }],
+    servers: [{ url: "https://thebridge-learning-backend-api-production.up.railway.app/" }],
     tags: [
         { name: "Estado" },
         { name: "Productos" },
